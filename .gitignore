@@ -1,0 +1,19 @@
+target/
+
+### IDE ###
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+
+### OS ###
+.DS_Store
+
+HELP.md
+
+### Secretos / salidas locales ###
+.env
+*.pem
+reports/
+*.log

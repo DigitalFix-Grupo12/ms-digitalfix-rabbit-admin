@@ -1,0 +1,35 @@
+server:
+  port: 8087
+
+spring:
+  application:
+    name: ms-digitalfix-rabbit-admin
+  rabbitmq:
+    addresses: ${RABBITMQ_ADDRESSES:localhost:5672,localhost:5673}
+    username: ${RABBITMQ_USERNAME:digitalfix}
+    password: ${RABBITMQ_PASSWORD:digitalfix}
+    connection-timeout: 3s
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+digitalfix:
+  rabbit-admin:
+    vhost: /
+    # Management HTTP API de cada nodo del cluster (se usa el primero que responda)
+    management-urls: ${RABBITMQ_MANAGEMENT_URLS:http://localhost:15672,http://localhost:15673}
+    management-username: ${RABBITMQ_USERNAME:digitalfix}
+    management-password: ${RABBITMQ_PASSWORD:digitalfix}
+    # Exchange al que se enlazan las DLQ creadas desde la API (mismo del caso)
+    dead-letter-exchange: cmd.dead.dlx
+    dead-letter-suffix: .dlq
+    # Recursos del sistema: no se pueden eliminar desde la API (evita romper los flujos)
+    protected-prefixes: cmd.,q.cmd.
+    # Tope de mensajes por operacion de lectura/reproceso
+    max-batch: 50
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
